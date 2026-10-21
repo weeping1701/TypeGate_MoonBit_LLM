@@ -1,0 +1,5 @@
+import {
+  "typegate/typegate" @typegate,
+}
+
+pkgtype(kind: "executable")

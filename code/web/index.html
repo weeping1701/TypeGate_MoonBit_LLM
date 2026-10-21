@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeGate · MoonBit 结构化输出引擎</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="hero">
+    <div class="badge">Powered by MoonBit · WASM / JS</div>
+    <h1>TypeGate</h1>
+    <p class="subtitle">MoonBit 类型驱动的 LLM 结构化输出引擎 —— 让大模型输出 <span>100% 合法、可解析</span></p>
+    <div class="pill-row">
+      <span class="pill">JSON Schema 校验</span>
+      <span class="pill">正则引擎 (NFA→DFA)</span>
+      <span class="pill">受约束解码</span>
+    </div>
+  </header>
+
+  <main class="grid">
+
+    <!-- 面板 1：JSON Schema 校验 -->
+    <section class="card">
+      <h2>① JSON Schema 校验器</h2>
+      <p class="hint">定义 Schema，校验 LLM 输出的 JSON 是否合法并定位错误。</p>
+      <label>JSON Schema</label>
+      <textarea id="schema" rows="5" spellcheck="false">{
+  "type": "object",
+  "properties": {
+    "city": { "type": "string" },
+    "temp": { "type": "number" },
+    "unit": { "type": "string", "pattern": "^[CF]$" }
+  },
+  "required": ["city", "temp"]
+}</textarea>
+      <label>JSON 数据</label>
+      <textarea id="data" rows="5" spellcheck="false">{"city":"Beijing","temp":25.5,"unit":"C"}</textarea>
+      <button id="validateBtn" class="btn">运行校验</button>
+      <div id="validateResult" class="result neutral">等待校验…</div>
+    </section>
+
+    <!-- 面板 2：正则引擎 -->
+    <section class="card">
+      <h2>② 正则引擎</h2>
+      <p class="hint">支持 <code>.</code> <code>*</code> <code>+</code> <code>?</code> <code>[a-z]</code> <code>^</code> <code>$</code>。</p>
+      <label>正则表达式</label>
+      <input id="pattern" type="text" value="^[a-z]+@[a-z]+\.[a-z]+$" spellcheck="false" />
+      <label>待匹配文本</label>
+      <input id="text" type="text" value="hello@moonbit.com" spellcheck="false" />
+      <button id="regexBtn" class="btn">测试匹配</button>
+      <div id="regexResult" class="result neutral">等待匹配…</div>
+    </section>
+
+    <!-- 面板 3：受约束解码 -->
+    <section class="card">
+      <h2>③ 受约束解码</h2>
+      <p class="hint">边输入边检测：当前文本是「非法 / 合法前缀 / 完整 JSON」，并给出下一个合法字符。</p>
+      <label>LLM 部分输出（边输入边检测）</label>
+      <textarea id="partial" rows="4" spellcheck="false">{"name":"</textarea>
+      <div class="state-row">
+        <span id="stateBadge" class="state incomplete">前缀（可继续）</span>
+      </div>
+      <label>下一个合法字符</label>
+      <div id="nextChars" class="chars">…</div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>TypeGate · 一个用 MoonBit 实现的结构化生成引擎 · 全部逻辑运行在你的浏览器中</p>
+  </footer>
+
+  <script src="typegate.browser.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
